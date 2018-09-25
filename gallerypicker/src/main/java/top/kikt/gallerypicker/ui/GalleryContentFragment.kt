@@ -3,14 +3,13 @@ package top.kikt.gallerypicker.ui
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.ListPopupWindow
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import com.codingending.popuplayout.PopupLayout
+import com.codingending.popuplayout.PopupLayout.POSITION_BOTTOM
 import top.kikt.gallerypicker.GalleryOption
 import top.kikt.gallerypicker.R
 import top.kikt.gallerypicker.engine.ImageProvider
@@ -116,11 +115,12 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, AdapterView.On
     }
 
     override fun onClick(v: View?) {
-        ListPopupWindow(activity!!)
-                .apply {
-                    anchorView = mTvCurrentGalleryName
-                    setAdapter(GalleryNameAdapter(provider.getPathEntityList()))
-                    setOnItemClickListener(this@GalleryContentFragment)
-                }.show()
+        val adapter = ArrayAdapter<ImageEntity>(activity, android.R.layout.select_dialog_item)
+        val listView = ListView(context)
+        listView.adapter = adapter
+        val popupLayout = PopupLayout.init(context, listView)
+        popupLayout.setHeight(500, true)
+        popupLayout.show(POSITION_BOTTOM)
+        listView.onItemClickListener = this
     }
 }
