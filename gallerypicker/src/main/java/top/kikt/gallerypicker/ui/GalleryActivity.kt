@@ -13,15 +13,11 @@ import java.util.concurrent.Executors
 
 class GalleryActivity : FragmentActivity(), ImageProvider {
 
-    val scanner = ImageScanner(this)
-
-    val threadPool = Executors.newFixedThreadPool(5)
-
-    val fragment = GalleryContentFragment()
-
-    val imageData = ArrayList<ImageEntity>()
-
-    val pathMap = HashMap<PathEntity, ArrayList<ImageEntity>>()
+    private val scanner = ImageScanner(this)
+    private val threadPool = Executors.newFixedThreadPool(5)
+    private val fragment = GalleryContentFragment()
+    private val imageData = ArrayList<ImageEntity>()
+    private val pathMap = HashMap<PathEntity, ArrayList<ImageEntity>>()
 
     companion object {
         val handler = Handler()
@@ -58,7 +54,7 @@ class GalleryActivity : FragmentActivity(), ImageProvider {
         }
     }
 
-    override fun getPathEntityList(): List<PathEntity> {
+    override fun getPathEntityList(): MutableList<PathEntity> {
         val list = pathMap.keys.toMutableList()
         list.add(0, GalleryContentFragment.ALL)
         return list

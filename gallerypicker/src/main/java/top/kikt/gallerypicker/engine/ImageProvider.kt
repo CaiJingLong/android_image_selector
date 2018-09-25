@@ -6,6 +6,6 @@ import top.kikt.gallerypicker.entity.PathEntity
 interface ImageProvider {
 
     fun getImageWithPath(pathEntity: PathEntity?): List<ImageEntity>
-    fun getPathEntityList(): List<PathEntity>
+    fun getPathEntityList(): MutableList<PathEntity>
 
 }

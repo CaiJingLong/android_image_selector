@@ -6,11 +6,11 @@ class PathEntity(val id: String, val title: String) {
         if (other !is PathEntity) {
             return false
         }
-        return this.id == other.id
+        return this.title == other.title
     }
 
     override fun hashCode(): Int {
-        return this.id.hashCode()
+        return this.title.hashCode()
     }
 
 }

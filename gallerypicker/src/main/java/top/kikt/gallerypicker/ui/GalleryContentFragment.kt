@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.TextView
 import com.codingending.popuplayout.PopupLayout
 import com.codingending.popuplayout.PopupLayout.POSITION_BOTTOM
 import top.kikt.gallerypicker.GalleryOption
@@ -18,7 +20,7 @@ import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.entity.PathEntity
 import top.kikt.gallerypicker.kotterknife.bindView
 
-class GalleryContentFragment : Fragment(), ImageSelectedProvider, AdapterView.OnItemClickListener, View.OnClickListener {
+class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickListener {
     private val mTvTitle: TextView by bindView(R.id.tv_title)
     private val mLayoutTitle: LinearLayout by bindView(R.id.layout_title)
     private val mRecyclerImage: RecyclerView by bindView(R.id.recycler_image)
@@ -32,7 +34,7 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, AdapterView.On
 
     private lateinit var provider: ImageProvider
 
-    val imageDatas = ArrayList<ImageEntity>()
+    private val imageDatas = ArrayList<ImageEntity>()
     private val selectList = ArrayList<ImageEntity>()
 
     var adapter: GalleryItemAdapter? = null
@@ -86,12 +88,6 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, AdapterView.On
         this.provider = provider
     }
 
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val pathEntityList = provider.getPathEntityList()
-        val pathEntity = pathEntityList[position]
-        changeTitle(pathEntity)
-    }
-
     override fun addImageEntity(entity: ImageEntity): Boolean {
         if (selectList.count() >= config.maxSelected) {
             return false
@@ -115,12 +111,38 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, AdapterView.On
     }
 
     override fun onClick(v: View?) {
-        val adapter = ArrayAdapter<ImageEntity>(activity, android.R.layout.select_dialog_item)
+        val pathList = provider.getPathEntityList()
+        pathList.sortWith(Comparator { o1, o2 ->
+            if (o1 == ALL) {
+                return@Comparator -1
+            }
+            if (o2 == ALL) {
+                return@Comparator 1
+            }
+            if (o1.title == "Camera") {
+                return@Comparator -1
+            }
+            if (o2.title == "Camera") {
+                return@Comparator 1
+            }
+            if (o1.title == "Screenshots") {
+                return@Comparator -1
+            }
+            if (o2.title == "Screenshots") {
+                return@Comparator 1
+            }
+            o1.title.compareTo(o2.title)
+        })
+        val adapter = GalleryPathAdapter(activity, pathList)
         val listView = ListView(context)
         listView.adapter = adapter
         val popupLayout = PopupLayout.init(context, listView)
         popupLayout.setHeight(500, true)
         popupLayout.show(POSITION_BOTTOM)
-        listView.onItemClickListener = this
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val pathEntity = pathList[position]
+            changeTitle(pathEntity)
+            popupLayout.dismiss()
+        }
     }
 }
