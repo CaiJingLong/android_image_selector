@@ -13,4 +13,6 @@ interface ImageSelectedProvider {
 
     fun indexOfImageEntity(entity: ImageEntity): Int
 
+    fun notifyUpdate()
+
 }

@@ -25,6 +25,8 @@ import top.kikt.gallerypicker.kotterknife.bindView
 import top.kikt.gallerypicker.ui.widget.RadioImageView
 
 class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickListener, GalleryItemAdapter.OnItemClickListener {
+
+    private val mLayoutBottomBar: LinearLayout by bindView(R.id.layout_bottom_bar)
     private val mIvBack: RadioImageView by bindView(R.id.iv_back)
     private val mTvSure: TextView by bindView(R.id.tv_sure)
     private val mTvTitle: TextView by bindView(R.id.tv_title)
@@ -52,6 +54,10 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
 
         val view = inflater.inflate(R.layout.fragment_gallery, container, false)
         rootView = view
+
+        mLayoutTitle.setBackgroundColor(config.themeColor)
+        mLayoutBottomBar.setBackgroundColor(config.themeColor)
+
         mRecyclerImage.layoutManager = GridLayoutManager(context, config.rowCount)
         mRecyclerImage.addItemDecoration(GalleryDecoration(config))
         val galleryItemAdapter = GalleryItemAdapter(imageDatas, this, config)
@@ -119,6 +125,9 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
         get() = ArrayList(this.selectList)
 
     override fun addImageEntity(entity: ImageEntity): Boolean {
+        if (selectList.contains(entity)) {
+            return false
+        }
         if (selectList.count() >= config.maxSelected) {
             toast(config.maxTip)
             return false
@@ -139,6 +148,10 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
 
     override fun indexOfImageEntity(entity: ImageEntity): Int {
         return selectList.indexOf(entity)
+    }
+
+    override fun notifyUpdate() {
+        adapter?.notifyDataSetChanged()
     }
 
     override fun onClick(v: View?) {
