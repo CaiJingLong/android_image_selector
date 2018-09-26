@@ -1,10 +1,13 @@
 package top.kikt.gallerypicker
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
+import top.kikt.gallerypicker.entity.ImageEntity
 
 class MainActivity : AppCompatActivity() {
     val picker = GalleryPicker(this)
@@ -33,5 +36,17 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         picker.permissionsUtils.dealResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GalleryPicker.REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val arrayList = data?.getParcelableArrayListExtra<ImageEntity>(GalleryPicker.RESULT_LIST)
+                logi(arrayList)
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                logi("取消选择")
+            }
+        }
     }
 }

@@ -10,17 +10,21 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import com.codingending.popuplayout.PopupLayout
 import com.codingending.popuplayout.PopupLayout.POSITION_BOTTOM
 import top.kikt.gallerypicker.GalleryOption
 import top.kikt.gallerypicker.R
 import top.kikt.gallerypicker.engine.ImageProvider
+import top.kikt.gallerypicker.engine.ImageSelectFinishCallback
 import top.kikt.gallerypicker.engine.ImageSelectedProvider
 import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.entity.PathEntity
 import top.kikt.gallerypicker.kotterknife.bindView
 
 class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickListener {
+    private val mIvBack: RadioImageView by bindView(R.id.iv_back)
+    private val mTvSure: TextView by bindView(R.id.tv_sure)
     private val mTvTitle: TextView by bindView(R.id.tv_title)
     private val mLayoutTitle: LinearLayout by bindView(R.id.layout_title)
     private val mRecyclerImage: RecyclerView by bindView(R.id.recycler_image)
@@ -53,6 +57,21 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
         mRecyclerImage.adapter = galleryItemAdapter
 
         mTvCurrentGalleryName.setOnClickListener(this)
+
+        mTvSure.setTextColor(config.textColor)
+        mTvSure.setOnClickListener {
+            val act = activity
+            if (act is ImageSelectFinishCallback) {
+                act.selectedSure(selectList)
+            }
+        }
+        mIvBack.setOnClickListener {
+            val act = activity
+            if (act is ImageSelectFinishCallback) {
+                act.selectedCancel()
+            }
+        }
+        updateCountText()
         return view
     }
 
@@ -68,7 +87,7 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
         } else {
             showImageWithPath(path)
         }
-        mRecyclerImage.scrollTo(0,0)
+        mRecyclerImage.scrollTo(0, 0)
     }
 
     private fun showAllImage() {
@@ -89,18 +108,26 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
         this.provider = provider
     }
 
-    override fun addImageEntity(entity: ImageEntity): Boolean {
-        if (selectList.count() >= config.maxSelected) {
-            return false
-        }
-        return selectList.add(entity)
+    private fun updateCountText() {
+        mTvSure.text = "确认(${selectList.count()}/${config.maxSelected})"
     }
 
-    override val selectedList: List<ImageEntity>
+    override val selectedList: ArrayList<ImageEntity>
         get() = ArrayList(this.selectList)
+
+    override fun addImageEntity(entity: ImageEntity): Boolean {
+        if (selectList.count() >= config.maxSelected) {
+            toast(config.maxTip)
+            return false
+        }
+        val result = selectList.add(entity)
+        updateCountText()
+        return result
+    }
 
     override fun removeImageEntity(entity: ImageEntity) {
         selectList.remove(entity)
+        updateCountText()
     }
 
     override fun containsImageEntity(entity: ImageEntity): Boolean {
@@ -145,5 +172,9 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
             changeTitle(pathEntity)
             popupLayout.dismiss()
         }
+    }
+
+    private fun toast(text: String) {
+        Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,0 +1,10 @@
+apply plugin: 'com.novoda.bintray-release'
+
+publish {
+    userOrg = 'caijinglong'
+    groupId = 'top.kikt'
+    artifactId = 'gallerypicker'
+    publishVersion = '0.9.0'//版本号
+    desc = 'image selector' //描述，不重要
+    website = 'https://github.com/CaiJingLong/android_image_selector.git'//网站，最好有，不重要
+}

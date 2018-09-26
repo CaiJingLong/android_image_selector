@@ -3,7 +3,7 @@ package top.kikt.gallerypicker.engine
 import top.kikt.gallerypicker.entity.ImageEntity
 
 interface ImageSelectedProvider {
-    val selectedList: List<ImageEntity>
+    val selectedList: ArrayList<ImageEntity>
 
     fun addImageEntity(entity: ImageEntity): Boolean
 

@@ -19,6 +19,8 @@ class GalleryOption {
     @ColorInt
     var themeColor = Color.BLACK
 
+    var maxTip: String = "已经选择了${maxSelected}张图片"
+
     companion object {
         var config = GalleryOption()
     }
