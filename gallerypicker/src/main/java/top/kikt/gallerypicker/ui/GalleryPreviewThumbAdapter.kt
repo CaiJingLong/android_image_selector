@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import top.kikt.gallerypicker.GalleryOption
 import top.kikt.gallerypicker.R
@@ -65,7 +64,7 @@ class GalleryPreviewThumbAdapter(private val imageSelectedProvider: ImageSelecte
 
     class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mIvPreview: RadioImageView by bindView(R.id.iv_preview)
-        val mLayoutPreview: LinearLayout by bindView(R.id.layout_preview)
+        val mLayoutPreview: ViewGroup by bindView(R.id.layout_preview)
         val mIvMask: RadioImageView by bindView(R.id.iv_mask)
     }
 

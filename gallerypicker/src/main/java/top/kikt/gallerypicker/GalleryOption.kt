@@ -17,7 +17,7 @@ class GalleryOption {
     var textColor = Color.WHITE
 
     @ColorInt
-    var themeColor = Color.BLACK
+    var themeColor = Color.parseColor("#333333")
 
     var maxTip: String = "已经选择了${maxSelected}张图片"
 

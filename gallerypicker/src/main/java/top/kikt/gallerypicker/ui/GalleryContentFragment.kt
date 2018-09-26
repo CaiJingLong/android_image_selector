@@ -186,15 +186,12 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
     }
 
     private fun preview(entity: ImageEntity) {
-        if (this.selectList.count() == 0) {
-            toast("必须先选择,才能进行预览")
-            return
-        }
+//        if (this.selectList.count() == 0) {
+//            toast("必须先选择,才能进行预览")
+//            return
+//        }
 
-        val previewFragment = GalleryPreviewFragment()
-        previewFragment.setSelectorProvider(this)
-        val initIndex = indexOfImageEntity(entity)
-        previewFragment.setInitIndex(initIndex)
+        val previewFragment = GalleryPreviewFragment.newInstance(this, this.imageDatas, this.imageDatas.indexOf(entity))
         val act = activity
         if (act is FragmentStack) {
             act.pushFragment(previewFragment)

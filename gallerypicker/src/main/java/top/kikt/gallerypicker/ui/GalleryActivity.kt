@@ -1,13 +1,19 @@
 package top.kikt.gallerypicker.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.util.AttributeSet
 import android.util.Log
+import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
+import top.kikt.gallerypicker.GalleryOption
 import top.kikt.gallerypicker.GalleryPicker
 import top.kikt.gallerypicker.R
 import top.kikt.gallerypicker.engine.FragmentStack
@@ -16,6 +22,7 @@ import top.kikt.gallerypicker.engine.ImageScanner
 import top.kikt.gallerypicker.engine.ImageSelectFinishCallback
 import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.entity.PathEntity
+import top.kikt.gallerypicker.ui.widget.RadioFrameLayout
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -46,6 +53,10 @@ class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCall
             notifyAdapterChanged()
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = GalleryOption.config.themeColor
+        }
     }
 
     private fun filterImage() {
@@ -128,5 +139,12 @@ class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCall
         val bt = supportFragmentManager.beginTransaction()
         bt.remove(fragment)
         bt.commit()
+    }
+
+    override fun onCreateView(name: String?, context: Context?, attrs: AttributeSet?): View? {
+        if (name == "RadioFrameLayout") {
+            return RadioFrameLayout(this, attrs)
+        }
+        return super.onCreateView(name, context, attrs)
     }
 }
