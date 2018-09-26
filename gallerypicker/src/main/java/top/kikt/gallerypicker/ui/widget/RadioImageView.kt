@@ -1,4 +1,4 @@
-package top.kikt.gallerypicker.ui
+package top.kikt.gallerypicker.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_preview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <top.kikt.gallerypicker.ui.widget.RadioImageView
+        android:id="@+id/iv_preview"
+        android:layout_width="@dimen/bar_height"
+        android:layout_height="@dimen/bar_height"
+        android:layout_margin="1dp" />
+
+
+    <top.kikt.gallerypicker.ui.widget.RadioImageView
+        android:id="@+id/iv_mask"
+        android:layout_width="@dimen/bar_height"
+        android:layout_height="@dimen/bar_height"
+        android:background="#55ffffff"
+        android:layout_margin="1dp" />
+
+
+</FrameLayout>

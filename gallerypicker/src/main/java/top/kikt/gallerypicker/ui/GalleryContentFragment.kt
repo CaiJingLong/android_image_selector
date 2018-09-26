@@ -15,14 +15,16 @@ import com.codingending.popuplayout.PopupLayout
 import com.codingending.popuplayout.PopupLayout.POSITION_BOTTOM
 import top.kikt.gallerypicker.GalleryOption
 import top.kikt.gallerypicker.R
+import top.kikt.gallerypicker.engine.FragmentStack
 import top.kikt.gallerypicker.engine.ImageProvider
 import top.kikt.gallerypicker.engine.ImageSelectFinishCallback
 import top.kikt.gallerypicker.engine.ImageSelectedProvider
 import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.entity.PathEntity
 import top.kikt.gallerypicker.kotterknife.bindView
+import top.kikt.gallerypicker.ui.widget.RadioImageView
 
-class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickListener {
+class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickListener, GalleryItemAdapter.OnItemClickListener {
     private val mIvBack: RadioImageView by bindView(R.id.iv_back)
     private val mTvSure: TextView by bindView(R.id.tv_sure)
     private val mTvTitle: TextView by bindView(R.id.tv_title)
@@ -54,6 +56,7 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
         mRecyclerImage.addItemDecoration(GalleryDecoration(config))
         val galleryItemAdapter = GalleryItemAdapter(imageDatas, this, config)
         this.adapter = galleryItemAdapter
+        galleryItemAdapter.onItemClickListener = this
         mRecyclerImage.adapter = galleryItemAdapter
 
         mTvCurrentGalleryName.setOnClickListener(this)
@@ -177,4 +180,25 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
     private fun toast(text: String) {
         Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
+
+    override fun onItemClick(entity: ImageEntity) {
+        preview(entity)
+    }
+
+    private fun preview(entity: ImageEntity) {
+        if (this.selectList.count() == 0) {
+            toast("必须先选择,才能进行预览")
+            return
+        }
+
+        val previewFragment = GalleryPreviewFragment()
+        previewFragment.setSelectorProvider(this)
+        val initIndex = indexOfImageEntity(entity)
+        previewFragment.setInitIndex(initIndex)
+        val act = activity
+        if (act is FragmentStack) {
+            act.pushFragment(previewFragment)
+        }
+    }
+
 }

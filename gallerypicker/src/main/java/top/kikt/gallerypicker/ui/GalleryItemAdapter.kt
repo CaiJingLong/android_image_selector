@@ -15,6 +15,7 @@ import top.kikt.gallerypicker.engine.ImageSelectedProvider
 import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.kotterknife.bindView
 import top.kikt.gallerypicker.ui.drawable.Selector
+import top.kikt.gallerypicker.ui.widget.RadioFrameLayout
 import java.io.File
 
 class GalleryItemAdapter(private val list: List<ImageEntity>, private val selectedProvider: ImageSelectedProvider, option: GalleryOption?) : RecyclerView.Adapter<GalleryItemAdapter.VH>() {
@@ -41,6 +42,10 @@ class GalleryItemAdapter(private val list: List<ImageEntity>, private val select
 
     override fun onBindViewHolder(viewHolder: VH, position: Int) {
         val entity = list[position]
+
+        viewHolder.itemView.setOnClickListener {
+            onItemClickListener?.onItemClick(entity)
+        }
 
         viewHolder.mIvImage.layoutParams.height = viewHolder.mIvImage.width
         viewHolder.mIvImage.requestLayout()
@@ -101,4 +106,9 @@ class GalleryItemAdapter(private val list: List<ImageEntity>, private val select
         val mLayoutRoot: RadioFrameLayout by bindView(R.id.layout_root)
     }
 
+    var onItemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(entity: ImageEntity)
+    }
 }

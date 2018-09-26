@@ -4,19 +4,22 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.widget.Toast
 import top.kikt.gallerypicker.GalleryPicker
 import top.kikt.gallerypicker.R
+import top.kikt.gallerypicker.engine.FragmentStack
 import top.kikt.gallerypicker.engine.ImageProvider
 import top.kikt.gallerypicker.engine.ImageScanner
 import top.kikt.gallerypicker.engine.ImageSelectFinishCallback
 import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.entity.PathEntity
+import java.util.*
 import java.util.concurrent.Executors
 
-class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCallback {
+class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCallback, FragmentStack {
 
 
     private val scanner = ImageScanner(this)
@@ -32,11 +35,7 @@ class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCall
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
-
-        val bt = supportFragmentManager.beginTransaction()
-        fragment.setProvider(this)
-        bt.add(R.id.fragment_container, fragment, "content")
-        bt.commit()
+        pushFragment(fragment)
 
         threadPool.execute {
             val arrayList = scanner.scan()
@@ -98,13 +97,36 @@ class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCall
     }
 
     override fun onBackPressed() {
-        setResult(Activity.RESULT_CANCELED)
-        super.onBackPressed()
+        popFragment()
     }
 
     private fun toast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
+    private val stack = Stack<Fragment>()
 
+    override fun pushFragment(fragment: Fragment) {
+        stack.push(fragment)
+
+        val bt = supportFragmentManager.beginTransaction()
+        if (fragment is GalleryContentFragment) {
+            fragment.setProvider(this)
+        }
+        bt.add(R.id.fragment_container, fragment, "content")
+        bt.commit()
+    }
+
+    override fun popFragment() {
+        if (stack.count() == 1) {
+            setResult(Activity.RESULT_CANCELED)
+            super.onBackPressed()
+            return
+        }
+        val fragment = stack.pop()
+
+        val bt = supportFragmentManager.beginTransaction()
+        bt.remove(fragment)
+        bt.commit()
+    }
 }

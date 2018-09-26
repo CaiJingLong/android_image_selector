@@ -50,5 +50,5 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'com.github.CodingEnding:PopupLayout:v1.0'
-    implementation 'com.android.support:multidex:1.0.3'
+
 }
