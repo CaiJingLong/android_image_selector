@@ -68,6 +68,7 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
         } else {
             showImageWithPath(path)
         }
+        mRecyclerImage.scrollTo(0,0)
     }
 
     private fun showAllImage() {

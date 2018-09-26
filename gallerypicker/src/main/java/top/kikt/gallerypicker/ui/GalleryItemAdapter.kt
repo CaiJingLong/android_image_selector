@@ -64,11 +64,32 @@ class GalleryItemAdapter(private val list: List<ImageEntity>, private val select
 
         viewHolder.mFrameLayoutSelector.setOnClickListener {
             if (isSelected) {
-                selectedProvider.removeImageEntity(entity)
-                notifyDataSetChanged()
+                removeSelectedPosition(position)
             } else {
                 if (selectedProvider.addImageEntity(entity)) notifyItemChanged(position)
             }
+        }
+    }
+
+    private fun removeSelectedPosition(position: Int) {
+        val changeList = ArrayList<Int>()
+
+        val entity = list[position]
+
+        changeList.add(position)
+
+        selectArray.forEach {
+            val selectedPosition = selectedProvider.indexOfImageEntity(list[it])
+            val changedPosition = selectedProvider.indexOfImageEntity(entity)
+            if (selectedPosition > changedPosition) {
+                changeList.add(it)
+            }
+        }
+
+        selectedProvider.removeImageEntity(entity)
+
+        changeList.forEach {
+            notifyItemChanged(it)
         }
     }
 
