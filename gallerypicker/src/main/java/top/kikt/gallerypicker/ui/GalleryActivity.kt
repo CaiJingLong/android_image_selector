@@ -29,7 +29,6 @@ import java.util.concurrent.Executors
 
 class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCallback, FragmentStack {
 
-
     private val scanner = ImageScanner(this)
     private val threadPool = Executors.newFixedThreadPool(5)
     private val fragment = GalleryContentFragment()

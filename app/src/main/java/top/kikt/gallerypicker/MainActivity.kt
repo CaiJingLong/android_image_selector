@@ -2,6 +2,7 @@ package top.kikt.gallerypicker
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import android.widget.Button
 import top.kikt.gallerypicker.entity.ImageEntity
 
 class MainActivity : AppCompatActivity() {
-    val picker = GalleryPicker(this)
+    private val picker = GalleryPicker(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,7 +27,10 @@ class MainActivity : AppCompatActivity() {
         addContentView(Button(this).apply {
             this.text = "开启"
             setOnClickListener {
-                picker.openWithOption(GalleryOption())
+                picker.openWithOption(GalleryOption().apply {
+                    themeColor = Color.BLUE
+                    textColor = Color.YELLOW
+                })
             }
         }, ViewGroup.MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
             this.topMargin = 300

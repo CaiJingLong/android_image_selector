@@ -1,6 +1,5 @@
 package top.kikt.gallerypicker.ui
 
-import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -15,13 +14,17 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import top.kikt.gallerypicker.GalleryOption
 import top.kikt.gallerypicker.GalleryOption.Companion.config
 import top.kikt.gallerypicker.R
 import top.kikt.gallerypicker.engine.ImageSelectedProvider
+import top.kikt.gallerypicker.engine.PreviewCurrentImageProvider
 import top.kikt.gallerypicker.entity.ImageEntity
+import top.kikt.gallerypicker.helper.ColorHelper
 import top.kikt.gallerypicker.kotterknife.bindView
 
-class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeListener, ViewPager.OnPageChangeListener {
+class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeListener, ViewPager.OnPageChangeListener, PreviewCurrentImageProvider {
+    private val mTvCheck: TextView by bindView(R.id.tv_check)
     private val mTvPreviewTitle: TextView by bindView(R.id.tv_preview_title)
     private val mViewPagerPreview: ViewPager by bindView(R.id.viewPager_preview)
     private val mTvSure: TextView by bindView(R.id.tv_sure)
@@ -61,7 +64,7 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
         view.setOnClickListener {
         }
         this.rootView = view
-        galleryPreviewThumbAdapter = GalleryPreviewThumbAdapter(selectorProvider, this, removeThumbFromInit = removeThumbFromInit)
+        galleryPreviewThumbAdapter = GalleryPreviewThumbAdapter(inflater.context, selectorProvider, this, this, removeThumbFromInit = removeThumbFromInit)
 
         initViewPager()
 
@@ -86,6 +89,17 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
 
         initCheckBoxColor()
 
+        val textColorStateList = ColorHelper.convertColorToColorStateList(GalleryOption.config.textColor)
+
+        mLayoutTopBar.setBackgroundColor(config.themeColor)
+        mLayoutBottomBar.setBackgroundColor(config.themeColor)
+
+        mTvCheck.setTextColor(config.textColor)
+        mTvSure.setTextColor(textColorStateList)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mIvBack.imageTintList = textColorStateList
+        }
+
         return view
     }
 
@@ -93,7 +107,7 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
         super.onDestroyView()
         // 根据当前选中重新排序
 
-        if(!removeThumbFromInit) {
+        if (!removeThumbFromInit) {
             selectorProvider.sortForInitList(galleryPreviewThumbAdapter.initList)
         }
     }
@@ -143,7 +157,7 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
         updateSelected()
     }
 
-    lateinit var galleryPreviewViewPagerAdapter: GalleryPreviewViewPagerAdapter
+    private lateinit var galleryPreviewViewPagerAdapter: GalleryPreviewViewPagerAdapter
 
     private fun initViewPager() {
         galleryPreviewViewPagerAdapter = GalleryPreviewViewPagerAdapter(previewList, childFragmentManager)
@@ -166,8 +180,8 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
 
     private fun updateSelected() {
         val currentItem = mViewPagerPreview.currentItem
-        val imageEntity = previewList[currentItem]
-        val selected = selectorProvider.containsImageEntity(imageEntity)
+
+        val selected = selectorProvider.containsImageEntity(currentImage())
 
         if (selected.not() && selectorProvider.selectedList.count() == config.maxSelected) {
             mCheckboxSelected.isEnabled = false
@@ -183,17 +197,20 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
         selectorProvider.notifyUpdate()
 
         mTvPreviewTitle.text = "${currentItem + 1}/${previewList.count()}"
+
+        galleryPreviewThumbAdapter.notifyDataSetChanged()
     }
 
 
     private fun initCheckBoxColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val states: Array<IntArray> = arrayOf(intArrayOf())
-            val colors: IntArray = intArrayOf(
-                    config.textColor
-            )
-            mCheckboxSelected.buttonTintList = ColorStateList(states, colors)
+            val stateList = ColorHelper.convertColorToColorStateList(GalleryOption.config.textColor, disableColor = GalleryOption.config.disableColor)
+            mCheckboxSelected.buttonTintList = stateList
         }
     }
 
+    override fun currentImage(): ImageEntity {
+        val currentItem = mViewPagerPreview.currentItem
+        return previewList[currentItem]
+    }
 }

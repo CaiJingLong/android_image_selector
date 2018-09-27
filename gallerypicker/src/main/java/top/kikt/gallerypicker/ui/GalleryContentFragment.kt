@@ -1,5 +1,6 @@
 package top.kikt.gallerypicker.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -21,6 +22,7 @@ import top.kikt.gallerypicker.engine.ImageSelectFinishCallback
 import top.kikt.gallerypicker.engine.ImageSelectedProvider
 import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.entity.PathEntity
+import top.kikt.gallerypicker.helper.ColorHelper
 import top.kikt.gallerypicker.kotterknife.bindView
 import top.kikt.gallerypicker.ui.widget.RadioImageView
 
@@ -46,7 +48,7 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, GalleryItemAda
     private val imageDatas = ArrayList<ImageEntity>()
     private val selectList = ArrayList<ImageEntity>()
 
-    var adapter: GalleryItemAdapter? = null
+    private var adapter: GalleryItemAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (rootView != null) {
@@ -89,7 +91,16 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, GalleryItemAda
         mTvPreview.setOnClickListener {
             preview()
         }
+
+        val textColorStateList = ColorHelper.convertColorToColorStateList(GalleryOption.config.textColor)
+
+        mTvCurrentGalleryName.setTextColor(config.textColor)
+        mTvTitle.setTextColor(config.textColor)
         mTvPreview.setTextColor(config.textColor)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mIvBack.imageTintList = textColorStateList
+        }
 
         return view
     }

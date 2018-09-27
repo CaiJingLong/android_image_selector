@@ -9,7 +9,7 @@ import top.kikt.gallerypicker.GalleryOption
 class GalleryDecoration(config: GalleryOption) : RecyclerView.ItemDecoration() {
 
     private val padding = config.padding
-    private val paddingColor = config.textColor
+    private val paddingColor = config.dividerColor
     private val rowCount = config.rowCount
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="bar_height">44dp</dimen>
-    <dimen name="preview_thumb_size">60dp</dimen>
+    <dimen name="preview_thumb_layout_size">64dp</dimen>
+    <dimen name="preview_thumb_image_size">60dp</dimen>
     <dimen name="textButtonPadding">15dp</dimen>
 </resources>

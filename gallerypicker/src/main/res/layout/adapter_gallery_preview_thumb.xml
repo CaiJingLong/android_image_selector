@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RadioFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_preview"
-    android:layout_width="@dimen/preview_thumb_size"
-    android:layout_height="@dimen/preview_thumb_size"
-    android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingEnd="10dp"
+    android:paddingStart="10dp">
 
-    <top.kikt.gallerypicker.ui.widget.RadioImageView
-        android:id="@+id/iv_preview"
-        android:layout_width="@dimen/preview_thumb_size"
-        android:layout_height="@dimen/preview_thumb_size"
-        android:layout_margin="1dp" />
+    <top.kikt.gallerypicker.ui.widget.RadioFrameLayout
+        android:id="@+id/layout_preview"
+        android:layout_width="@dimen/preview_thumb_layout_size"
+        android:layout_height="@dimen/preview_thumb_image_size"
+        android:orientation="vertical">
+
+        <top.kikt.gallerypicker.ui.widget.RadioImageView
+            android:id="@+id/iv_preview"
+            android:layout_width="@dimen/preview_thumb_image_size"
+            android:layout_height="@dimen/preview_thumb_image_size"
+            android:layout_gravity="center"
+            android:layout_margin="2dp" />
 
 
-    <top.kikt.gallerypicker.ui.widget.RadioImageView
-        android:id="@+id/iv_mask"
-        android:layout_width="@dimen/preview_thumb_size"
-        android:layout_height="@dimen/preview_thumb_size"
-        android:layout_margin="1dp"
-        android:src="#55ffffff" />
+        <top.kikt.gallerypicker.ui.widget.RadioImageView
+            android:id="@+id/iv_mask"
+            android:layout_width="@dimen/preview_thumb_image_size"
+            android:layout_height="@dimen/preview_thumb_image_size"
+            android:layout_gravity="center"
+            android:layout_margin="2dp"
+            android:src="#88000000" />
 
 
-</RadioFrameLayout>
+    </top.kikt.gallerypicker.ui.widget.RadioFrameLayout>
+
+</FrameLayout>

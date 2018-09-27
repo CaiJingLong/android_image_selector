@@ -1,5 +1,6 @@
 package top.kikt.gallerypicker.ui
 
+import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -12,12 +13,19 @@ import com.bumptech.glide.Glide
 import top.kikt.gallerypicker.GalleryOption
 import top.kikt.gallerypicker.R
 import top.kikt.gallerypicker.engine.ImageSelectedProvider
+import top.kikt.gallerypicker.engine.PreviewCurrentImageProvider
 import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.kotterknife.bindView
 import top.kikt.gallerypicker.ui.widget.RadioImageView
 import java.io.File
+import kotlin.math.roundToInt
 
-class GalleryPreviewThumbAdapter(private val imageSelectedProvider: ImageSelectedProvider, private val onChangeListener: OnChangeListener, private var galleryOption: GalleryOption? = null, private var removeThumbFromInit: Boolean = true) : RecyclerView.Adapter<GalleryPreviewThumbAdapter.VH>() {
+class GalleryPreviewThumbAdapter(context: Context,
+                                 private val imageSelectedProvider: ImageSelectedProvider,
+                                 private val onChangeListener: OnChangeListener,
+                                 private val currentProvider: PreviewCurrentImageProvider,
+                                 private var galleryOption: GalleryOption? = null,
+                                 private var removeThumbFromInit: Boolean = true) : RecyclerView.Adapter<GalleryPreviewThumbAdapter.VH>() {
     val initList = ArrayList(imageSelectedProvider.selectedList)
 
     private val list: ArrayList<ImageEntity>
@@ -30,11 +38,14 @@ class GalleryPreviewThumbAdapter(private val imageSelectedProvider: ImageSelecte
 
     private lateinit var selectedDrawable: Drawable
 
+
     init {
+
+
         galleryOption = galleryOption ?: GalleryOption.config
         galleryOption?.also {
             val selectedBackground = GradientDrawable()
-            selectedBackground.setStroke(2, it.themeColor)
+            selectedBackground.setStroke((2 * context.resources.displayMetrics.density).roundToInt(), it.themeColor)
             selectedDrawable = selectedBackground
         }
     }
@@ -61,13 +72,13 @@ class GalleryPreviewThumbAdapter(private val imageSelectedProvider: ImageSelecte
                     .thumbnail(0.8f)
                     .into(mIvPreview)
 
-            mIvMask.visibility = if (selected) View.GONE else View.INVISIBLE
+            mIvMask.visibility = if (selected) View.GONE else View.VISIBLE
 
             itemView.setOnClickListener {
                 onChangeListener.onSelectedImage(entity)
             }
 
-            mLayoutPreview.background = if (selected) selectedDrawable else ColorDrawable()
+            mLayoutPreview.background = if (currentProvider.currentImage() == entity) selectedDrawable else ColorDrawable()
         }
     }
 

@@ -19,6 +19,12 @@ class GalleryOption {
     @ColorInt
     var themeColor = Color.parseColor("#333333")
 
+    @ColorInt
+    var dividerColor = Color.parseColor("#333333")
+
+    @ColorInt
+    var disableColor = Color.GRAY
+
     var maxTip: String = "已经选择了${maxSelected}张图片"
 
     companion object {
