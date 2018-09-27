@@ -17,11 +17,16 @@ import top.kikt.gallerypicker.kotterknife.bindView
 import top.kikt.gallerypicker.ui.widget.RadioImageView
 import java.io.File
 
-class GalleryPreviewThumbAdapter(private val imageSelectedProvider: ImageSelectedProvider, private val onChangeListener: OnChangeListener, private var galleryOption: GalleryOption? = null) : RecyclerView.Adapter<GalleryPreviewThumbAdapter.VH>() {
+class GalleryPreviewThumbAdapter(private val imageSelectedProvider: ImageSelectedProvider, private val onChangeListener: OnChangeListener, private var galleryOption: GalleryOption? = null, private var removeThumbFromInit: Boolean = true) : RecyclerView.Adapter<GalleryPreviewThumbAdapter.VH>() {
+    val initList = ArrayList(imageSelectedProvider.selectedList)
 
-
-    private val list
-        get() = ArrayList(imageSelectedProvider.selectedList)
+    private val list: ArrayList<ImageEntity>
+        get() {
+            if (!removeThumbFromInit) {
+                return initList
+            }
+            return ArrayList(imageSelectedProvider.selectedList)
+        }
 
     private lateinit var selectedDrawable: Drawable
 
@@ -47,14 +52,15 @@ class GalleryPreviewThumbAdapter(private val imageSelectedProvider: ImageSelecte
         val entity = list[position]
         val selected = imageSelectedProvider.containsImageEntity(entity)
 
-        viewHolder.mIvPreview.scaleType = ImageView.ScaleType.CENTER_CROP
-
-        Glide.with(viewHolder.itemView)
-                .load(File(entity.path))
-                .thumbnail(0.8f)
-                .into(viewHolder.mIvPreview)
-
         viewHolder.apply {
+
+            mIvPreview.scaleType = ImageView.ScaleType.CENTER_CROP
+
+            Glide.with(viewHolder.itemView)
+                    .load(File(entity.path))
+                    .thumbnail(0.8f)
+                    .into(mIvPreview)
+
             mIvMask.visibility = if (selected) View.GONE else View.INVISIBLE
 
             itemView.setOnClickListener {

@@ -24,7 +24,8 @@ import top.kikt.gallerypicker.entity.PathEntity
 import top.kikt.gallerypicker.kotterknife.bindView
 import top.kikt.gallerypicker.ui.widget.RadioImageView
 
-class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickListener, GalleryItemAdapter.OnItemClickListener {
+class GalleryContentFragment : Fragment(), ImageSelectedProvider, GalleryItemAdapter.OnItemClickListener {
+    private val mTvPreview: TextView by bindView(R.id.tv_preview)
 
     private val mLayoutBottomBar: LinearLayout by bindView(R.id.layout_bottom_bar)
     private val mIvBack: RadioImageView by bindView(R.id.iv_back)
@@ -65,7 +66,10 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
         galleryItemAdapter.onItemClickListener = this
         mRecyclerImage.adapter = galleryItemAdapter
 
-        mTvCurrentGalleryName.setOnClickListener(this)
+
+        mTvCurrentGalleryName.setOnClickListener {
+            selectedGallery()
+        }
 
         mTvSure.setTextColor(config.textColor)
         mTvSure.setOnClickListener {
@@ -81,6 +85,12 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
             }
         }
         updateCountText()
+
+        mTvPreview.setOnClickListener {
+            preview()
+        }
+        mTvPreview.setTextColor(config.textColor)
+
         return view
     }
 
@@ -91,20 +101,11 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
     }
 
     fun changeTitle(path: PathEntity) {
-        if (path == ALL) {
-            showAllImage()
-        } else {
-            showImageWithPath(path)
-        }
-        mRecyclerImage.scrollTo(0, 0)
+        showImageWithPath(path)
+        mRecyclerImage.layoutManager?.scrollToPosition(0)
+        mTvCurrentGalleryName.text = path.title
     }
 
-    private fun showAllImage() {
-        val imageList = provider.getImageWithPath(null)
-        imageDatas.clear()
-        imageDatas.addAll(imageList)
-        adapter?.notifyDataSetChanged()
-    }
 
     private fun showImageWithPath(path: PathEntity) {
         val imageList = provider.getImageWithPath(path)
@@ -119,6 +120,7 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
 
     private fun updateCountText() {
         mTvSure.text = "确认(${selectList.count()}/${config.maxSelected})"
+        mTvPreview.text = "预览(${selectList.count()})"
     }
 
     override val selectedList: ArrayList<ImageEntity>
@@ -150,11 +152,29 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
         return selectList.indexOf(entity)
     }
 
+
+    override fun sortForInitList(initList: ArrayList<ImageEntity>) {
+        //当前选中的图库中如果还存在,则按照初始化时的顺序重新排序
+
+        val currentList = ArrayList(selectList)
+
+        selectList.clear()
+
+        initList.forEach {
+            if (currentList.contains(it)) {
+                selectList.add(it)
+            }
+        }
+
+        notifyUpdate()
+    }
+
+
     override fun notifyUpdate() {
         adapter?.notifyDataSetChanged()
     }
 
-    override fun onClick(v: View?) {
+    private fun selectedGallery() {
         val pathList = provider.getPathEntityList()
         pathList.sortWith(Comparator { o1, o2 ->
             if (o1 == ALL) {
@@ -198,13 +218,22 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, View.OnClickLi
         preview(entity)
     }
 
+    /**
+     * 预览当前图库文件夹
+     */
     private fun preview(entity: ImageEntity) {
-//        if (this.selectList.count() == 0) {
-//            toast("必须先选择,才能进行预览")
-//            return
-//        }
+        val previewFragment = GalleryPreviewFragment.newInstance(this, this.imageDatas, this.imageDatas.indexOf(entity), removeThumbFromInit = true)
+        val act = activity
+        if (act is FragmentStack) {
+            act.pushFragment(previewFragment)
+        }
+    }
 
-        val previewFragment = GalleryPreviewFragment.newInstance(this, this.imageDatas, this.imageDatas.indexOf(entity))
+    /**
+     * 仅预览选中图片
+     */
+    private fun preview() {
+        val previewFragment = GalleryPreviewFragment.newInstance(this, ArrayList(this.selectList), removeThumbFromInit = false)
         val act = activity
         if (act is FragmentStack) {
             act.pushFragment(previewFragment)

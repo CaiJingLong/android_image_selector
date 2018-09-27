@@ -26,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:padding="8dp"
+            android:paddingEnd="@dimen/textButtonPadding"
+            android:paddingStart="@dimen/textButtonPadding"
             android:text="选择图片"
             android:textColor="#FFFF" />
 
@@ -40,8 +41,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp"
+            android:paddingEnd="@dimen/textButtonPadding"
+            android:paddingStart="@dimen/textButtonPadding"
             android:text="完成"
             android:textColor="#fff" />
 
@@ -54,9 +55,9 @@
         android:layout_weight="1" />
 
     <LinearLayout
+        android:id="@+id/layout_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bar_height"
-        android:id="@+id/layout_bottom_bar"
         android:background="#333"
         android:orientation="horizontal">
 
@@ -65,9 +66,25 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:padding="8dp"
+            android:paddingEnd="@dimen/textButtonPadding"
+            android:paddingStart="@dimen/textButtonPadding"
             android:text="所有图片"
             android:textColor="#FFFF" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingEnd="@dimen/textButtonPadding"
+            android:paddingStart="@dimen/textButtonPadding"
+            android:text="预览"
+            android:textColor="#fff" />
 
     </LinearLayout>
 

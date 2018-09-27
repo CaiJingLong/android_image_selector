@@ -23,6 +23,7 @@ import top.kikt.gallerypicker.engine.ImageSelectFinishCallback
 import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.entity.PathEntity
 import top.kikt.gallerypicker.ui.widget.RadioFrameLayout
+import top.kikt.gallerypicker.ui.widget.RadioImageView
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -83,7 +84,7 @@ class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCall
     }
 
     override fun getImageWithPath(pathEntity: PathEntity?): List<ImageEntity> {
-        if (pathEntity == null) {
+        if (pathEntity == null || pathEntity == GalleryContentFragment.ALL) {
             return imageData.toList()
         }
         return pathMap[pathEntity]?.toList() ?: arrayListOf()
@@ -144,6 +145,9 @@ class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCall
     override fun onCreateView(name: String?, context: Context?, attrs: AttributeSet?): View? {
         if (name == "RadioFrameLayout") {
             return RadioFrameLayout(this, attrs)
+        }
+        if (name == "RadioImageView") {
+            return RadioImageView(this, attrs)
         }
         return super.onCreateView(name, context, attrs)
     }

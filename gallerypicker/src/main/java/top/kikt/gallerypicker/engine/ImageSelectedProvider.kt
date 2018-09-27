@@ -13,6 +13,11 @@ interface ImageSelectedProvider {
 
     fun indexOfImageEntity(entity: ImageEntity): Int
 
+    /**
+     * 重新排序
+     */
+    fun sortForInitList(initList: ArrayList<ImageEntity>)
+
     fun notifyUpdate()
 
 }

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RadioFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_preview"
-    android:layout_width="@dimen/bar_height"
-    android:layout_height="@dimen/bar_height"
+    android:layout_width="@dimen/preview_thumb_size"
+    android:layout_height="@dimen/preview_thumb_size"
     android:orientation="vertical">
 
     <top.kikt.gallerypicker.ui.widget.RadioImageView
         android:id="@+id/iv_preview"
-        android:layout_width="@dimen/bar_height"
-        android:layout_height="@dimen/bar_height"
+        android:layout_width="@dimen/preview_thumb_size"
+        android:layout_height="@dimen/preview_thumb_size"
         android:layout_margin="1dp" />
 
 
     <top.kikt.gallerypicker.ui.widget.RadioImageView
         android:id="@+id/iv_mask"
-        android:layout_width="@dimen/bar_height"
-        android:layout_height="@dimen/bar_height"
+        android:layout_width="@dimen/preview_thumb_size"
+        android:layout_height="@dimen/preview_thumb_size"
         android:layout_margin="1dp"
-        android:background="#55ffffff" />
+        android:src="#55ffffff" />
 
 
 </RadioFrameLayout>
