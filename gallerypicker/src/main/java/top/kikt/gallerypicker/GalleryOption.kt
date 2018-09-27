@@ -7,7 +7,7 @@ class GalleryOption {
 
     var rowCount = 4  // 单行的图片数量
 
-    val maxSelected = 9 //最大选择数量
+    var maxSelected = 9 //最大选择数量
 
     var itemRadio = 1f //item的宽高比
 

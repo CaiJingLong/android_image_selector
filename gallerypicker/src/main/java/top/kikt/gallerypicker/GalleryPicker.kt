@@ -4,9 +4,11 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.widget.Toast
+import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.permission.PermissionsListener
 import top.kikt.gallerypicker.permission.PermissionsUtils
 import top.kikt.gallerypicker.ui.GalleryActivity
+import java.util.*
 
 class GalleryPicker(val context: Activity) {
 
@@ -59,5 +61,7 @@ class GalleryPicker(val context: Activity) {
         context.startActivityForResult(intent, requestCode)
     }
 
-
+    fun getResultFromIntent(intent: Intent): ArrayList<ImageEntity>? {
+        return intent.getParcelableArrayListExtra(RESULT_LIST)
+    }
 }

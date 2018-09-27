@@ -10,7 +10,6 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import top.kikt.gallerypicker.GalleryOption
 import top.kikt.gallerypicker.GalleryPicker
-import top.kikt.gallerypicker.entity.ImageEntity
 import top.kikt.gallerypicker.logi
 
 class MainActivity : AppCompatActivity() {
@@ -48,9 +47,8 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GalleryPicker.REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                val arrayList = data?.getParcelableArrayListExtra<ImageEntity>(GalleryPicker.RESULT_LIST)
-                logi(arrayList)
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                picker.getResultFromIntent(data)
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 logi("取消选择")
             }
