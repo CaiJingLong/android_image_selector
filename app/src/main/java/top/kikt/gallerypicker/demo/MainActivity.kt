@@ -1,4 +1,4 @@
-package top.kikt.gallerypicker
+package top.kikt.gallerypicker.demo
 
 import android.app.Activity
 import android.content.Intent
@@ -8,7 +8,10 @@ import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
+import top.kikt.gallerypicker.GalleryOption
+import top.kikt.gallerypicker.GalleryPicker
 import top.kikt.gallerypicker.entity.ImageEntity
+import top.kikt.gallerypicker.logi
 
 class MainActivity : AppCompatActivity() {
     private val picker = GalleryPicker(this)

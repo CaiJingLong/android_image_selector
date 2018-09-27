@@ -109,6 +109,8 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
 
         if (!removeThumbFromInit) {
             selectorProvider.sortForInitList(galleryPreviewThumbAdapter.initList)
+        }else{
+            selectorProvider.notifyUpdate()
         }
     }
 
@@ -194,7 +196,6 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
         }
 
         mCheckboxSelected.isChecked = selected
-        selectorProvider.notifyUpdate()
 
         mTvPreviewTitle.text = "${currentItem + 1}/${previewList.count()}"
 

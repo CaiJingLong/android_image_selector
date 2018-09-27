@@ -18,7 +18,7 @@ class GalleryPicker(val context: Activity) {
     val permissionsUtils: PermissionsUtils = PermissionsUtils()
     private var hasPermission = false
 
-    fun requestPermission() {
+    fun requestPermission(successRunner: (() -> Unit)? = null) {
         permissionsUtils
                 .apply {
                     withActivity(context)
@@ -31,19 +31,33 @@ class GalleryPicker(val context: Activity) {
 
                         override fun onGranted() {
                             hasPermission = true
+                            successRunner?.invoke()
                         }
                     }
                 }.getPermissions(context, 3001, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
-    fun openWithOption(option: GalleryOption, requestCode: Int = REQUEST_CODE) {
-        if (hasPermission.not()) {
-            Toast.makeText(context, "权限被拒绝", Toast.LENGTH_SHORT).show()
+    fun openWithOption(option: GalleryOption, requestCode: Int = REQUEST_CODE, ignorePermission: Boolean = false) {
+        if (ignorePermission) {
+            openPicker(option, requestCode)
             return
         }
+
+        if (hasPermission.not()) {
+            requestPermission {
+                openPicker(option, requestCode)
+            }
+            return
+        }
+
+        openPicker(option, requestCode)
+    }
+
+    private fun openPicker(option: GalleryOption, requestCode: Int) {
         GalleryOption.config = option
         val intent = Intent(context, GalleryActivity::class.java)
         context.startActivityForResult(intent, requestCode)
     }
+
 
 }

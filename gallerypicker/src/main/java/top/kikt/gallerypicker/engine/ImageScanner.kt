@@ -3,6 +3,7 @@ package top.kikt.gallerypicker.engine
 import android.content.Context
 import android.provider.MediaStore
 import top.kikt.gallerypicker.entity.ImageEntity
+import java.io.File
 
 class ImageScanner(private val context: Context) {
 
@@ -40,7 +41,8 @@ class ImageScanner(private val context: Context) {
             val imgId = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.ImageColumns._ID))
             val img = ImageEntity(imgId, path, dirId, dir, thumb)
 
-            resultList.add(img)
+            if (File(path).exists())
+                resultList.add(img)
         }
         mCursor.close()
 
