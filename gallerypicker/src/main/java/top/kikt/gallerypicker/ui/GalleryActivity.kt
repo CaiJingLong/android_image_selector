@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import top.kikt.gallerypicker.GalleryOption
@@ -41,6 +42,7 @@ class GalleryActivity : FragmentActivity(), ImageProvider, ImageSelectFinishCall
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_gallery)
         pushFragment(fragment)
 

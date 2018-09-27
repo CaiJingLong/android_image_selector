@@ -61,7 +61,7 @@ class GalleryPicker(val context: Activity) {
         context.startActivityForResult(intent, requestCode)
     }
 
-    fun getResultFromIntent(intent: Intent): ArrayList<ImageEntity>? {
+    fun getResultFromIntent(intent:Intent): ArrayList<ImageEntity>? {
         return intent.getParcelableArrayListExtra(RESULT_LIST)
     }
 }
