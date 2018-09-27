@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
             this.text = "开启"
             setOnClickListener {
                 picker.openWithOption(GalleryOption().apply {
-                    themeColor = Color.BLUE
-                    textColor = Color.YELLOW
+                    themeColor = Color.parseColor("#3772E0")
+                    textColor = Color.WHITE
                 })
             }
         }, ViewGroup.MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
