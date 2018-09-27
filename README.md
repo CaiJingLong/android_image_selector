@@ -124,10 +124,77 @@ subprojects {
     }
 }
 
-```
+
 ---------------------
 
 本文来自 脚踏七星 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/qq998701/article/details/82593875?utm_source=copy 
+```
+
+### gradle文件
+一个library的完整gradle如下
+
+```gradle
+group 'com.example.foto'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.2'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+
+
+    subprojects {
+        project.configurations.all {
+            resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == 'com.android.support'
+                        && !details.requested.name.contains('multidex')) {
+                    details.useVersion "$supportLibraryVersion"
+                }
+            }
+        }
+    }
+
+}
+
+ext {
+    // App dependencies
+    supportLibraryVersion = '27.1.1'
+
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 18
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+
+dependencies {
+    implementation 'com.github.caijinglong:android_image_selector:0.9.2'
+}
+
+```
 
 ## LICENSE
 
