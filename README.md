@@ -95,9 +95,39 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 demo 里的 jks name/alias 都是 dd, 密码都为 123456
 
-## 图片加载相关
+## 库冲突
+
+### 图片加载相关
 
 使用的是 Glide 4.4 加载图片,如果你也有 Glide,请自行在依赖中 exclude glide, 或 fork library 自行修改依赖,不保证其他版本的 Glide api 一定可用
+
+### support库
+因为库中使用了support库(ViewPager/RecyclerView),版本为28.0.0
+如果你使用的android编译版本不是28,或者supoort库有不同的版本引发冲突,考虑使用如下方法
+
+```gradle
+//解决V7包，引入冲突，强制使用某个库的统一版本，如统一引入V7某个版本
+ext {
+    // App dependencies
+    supportLibraryVersion = '27.1.1'
+ 
+}
+
+subprojects {
+    project.configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.android.support'
+                    && !details.requested.name.contains('multidex')) {
+                details.useVersion "$supportLibraryVersion"
+            }
+        }
+    }
+}
+
+```
+---------------------
+
+本文来自 脚踏七星 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/qq998701/article/details/82593875?utm_source=copy 
 
 ## LICENSE
 
