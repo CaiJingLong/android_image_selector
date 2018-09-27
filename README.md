@@ -2,7 +2,7 @@
 
 一个仿微信的图片选择器,去除了大图放大/ 图片编辑/原图选项
 
-[![Release](https://jitpack.io/v/caijinglong/android_image_selector)](https://jitpack.io/#caijinglong/android_image_selector)
+[![Release](https://jitpack.io/v/caijinglong/android_image_selector.svg)](https://jitpack.io/#caijinglong/android_image_selector)
 
 ## install
 
