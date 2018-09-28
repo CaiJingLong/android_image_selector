@@ -25,7 +25,16 @@ class GalleryOption {
     @ColorInt
     var disableColor = Color.GRAY   // 当不可继续选择时,checkBox的颜色
 
-    var maxTip: String = "已经选择了${maxSelected}张图片" // 当选择达到上限时的提示语
+    val maxTip: String   // 当选择达到上限时的提示语
+        get() = tipBuilder?.buildTip(maxSelected) ?: "已经选择了${maxSelected}张图片"
+
+    interface TipBuilder {
+
+        fun buildTip(maxSelected: Int): String
+
+    }
+
+    var tipBuilder: TipBuilder? = null
 
     companion object {
         var config = GalleryOption()
