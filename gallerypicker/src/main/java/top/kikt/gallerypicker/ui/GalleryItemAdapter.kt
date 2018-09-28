@@ -46,9 +46,9 @@ class GalleryItemAdapter(private val list: List<ImageEntity>, private val select
         viewHolder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(entity)
         }
-
-        viewHolder.mIvImage.layoutParams.height = viewHolder.mIvImage.width
-        viewHolder.mIvImage.requestLayout()
+//
+//        viewHolder.mIvImage.layoutParams.height = viewHolder.mIvImage.width
+//        viewHolder.mIvImage.requestLayout()
         Glide.with(viewHolder.itemView)
                 .load(File(entity.path))
                 .thumbnail(0.15f)

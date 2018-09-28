@@ -29,10 +29,13 @@ class MainActivity : AppCompatActivity() {
         addContentView(Button(this).apply {
             this.text = "开启"
             setOnClickListener {
-                picker.openWithOption(GalleryOption().apply {
-                    themeColor = Color.parseColor("#3772E0")
-                    textColor = Color.WHITE
-                })
+                picker.openWithOption(
+                        GalleryOption().apply {
+                            themeColor = Color.parseColor("#3772E0")
+                            textColor = Color.WHITE
+                            itemRadio = 2.0f
+                        }
+                )
             }
         }, ViewGroup.MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
             this.topMargin = 300

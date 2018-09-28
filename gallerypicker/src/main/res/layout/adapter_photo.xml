@@ -6,7 +6,7 @@
     android:id="@+id/layout_root"
     android:orientation="vertical">
 
-    <top.kikt.gallerypicker.ui.widget.RadioImageView
+    <ImageView
         android:id="@+id/iv_image"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
