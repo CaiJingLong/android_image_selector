@@ -21,12 +21,12 @@
             android:tint="#fff" />
 
         <TextView
-            android:layout_width="0dp"
             android:id="@+id/tv_preview_title"
-            android:paddingEnd="@dimen/textButtonPadding"
-            android:paddingStart="@dimen/textButtonPadding"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:paddingEnd="@dimen/textButtonPadding"
+            android:paddingStart="@dimen/textButtonPadding" />
 
         <TextView
             android:id="@+id/tv_sure"
@@ -62,22 +62,25 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
+            android:orientation="horizontal"
             android:paddingEnd="@dimen/textButtonPadding"
-            android:paddingStart="@dimen/textButtonPadding"
-            android:orientation="horizontal">
+            android:paddingStart="@dimen/textButtonPadding">
 
-            <android.support.v7.widget.AppCompatCheckBox
+            <ImageView
                 android:id="@+id/checkbox_selected"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/bar_height"
+                android:layout_height="@dimen/bar_height"
                 android:layout_gravity="center_vertical"
-                android:checked="true" />
+                android:checked="true"
+                android:padding="10dp"
+                android:src="@drawable/selector_check_box"
+                android:tint="#ffffff" />
 
             <TextView
+                android:id="@+id/tv_check"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:id="@+id/tv_check"
                 android:text="选择"
                 android:textColor="#fff" />
 

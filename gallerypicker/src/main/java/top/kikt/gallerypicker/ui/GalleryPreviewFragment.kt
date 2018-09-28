@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.AppCompatCheckBox
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -24,13 +23,13 @@ import top.kikt.gallerypicker.helper.ColorHelper
 import top.kikt.gallerypicker.kotterknife.bindView
 
 class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeListener, ViewPager.OnPageChangeListener, PreviewCurrentImageProvider {
+    private val mCheckboxSelected: ImageView by bindView(R.id.checkbox_selected)
     private val mTvCheck: TextView by bindView(R.id.tv_check)
     private val mTvPreviewTitle: TextView by bindView(R.id.tv_preview_title)
     private val mViewPagerPreview: ViewPager by bindView(R.id.viewPager_preview)
     private val mTvSure: TextView by bindView(R.id.tv_sure)
     private val mLayoutTopBar: LinearLayout by bindView(R.id.layout_top_bar)
     private val mRecyclerSmallImage: RecyclerView by bindView(R.id.recycler_small_image)
-    private val mCheckboxSelected: AppCompatCheckBox by bindView(R.id.checkbox_selected)
     private val mLayoutChecked: LinearLayout by bindView(R.id.layout_checked)
     private val mLayoutBottomBar: FrameLayout by bindView(R.id.layout_bottom_bar)
     private val mIvBack: ImageView by bindView(R.id.iv_back)
@@ -72,10 +71,8 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
         mRecyclerSmallImage.adapter = galleryPreviewThumbAdapter
 
         mLayoutChecked.setOnClickListener {
-            mCheckboxSelected.isChecked = mCheckboxSelected.isChecked.not()
-        }
-        mCheckboxSelected.setOnCheckedChangeListener { _, checked ->
-            onCheckChanged(checked)
+            mLayoutChecked.isSelected = !mLayoutChecked.isSelected
+            onCheckChanged(mCheckboxSelected.isSelected)
         }
 
         mTvSure.text = "确认(${selectorProvider.selectedList.count()}/${config.maxSelected})"
@@ -185,17 +182,9 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
 
         val selected = selectorProvider.containsImageEntity(currentImage())
 
-        if (selected.not() && selectorProvider.selectedList.count() == config.maxSelected) {
-            mCheckboxSelected.isEnabled = false
-            mLayoutChecked.setOnClickListener { }
-        } else {
-            mCheckboxSelected.isEnabled = true
-            mLayoutChecked.setOnClickListener {
-                mCheckboxSelected.isChecked = mCheckboxSelected.isChecked.not()
-            }
-        }
+        mCheckboxSelected.isEnabled = !(selected.not() && selectorProvider.selectedList.count() == config.maxSelected)
 
-        mCheckboxSelected.isChecked = selected
+        mCheckboxSelected.isSelected = selected
 
         mTvPreviewTitle.text = "${currentItem + 1}/${previewList.count()}"
 
@@ -206,7 +195,7 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
     private fun initCheckBoxColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val stateList = ColorHelper.convertColorToColorStateList(GalleryOption.config.textColor, disableColor = GalleryOption.config.disableColor)
-            mCheckboxSelected.buttonTintList = stateList
+            mCheckboxSelected.imageTintList = stateList
         }
     }
 

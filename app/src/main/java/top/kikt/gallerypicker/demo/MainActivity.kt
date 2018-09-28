@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                 picker.openWithOption(
                         GalleryOption().apply {
                             themeColor = Color.parseColor("#3772E0")
-                            textColor = Color.WHITE
+                            textColor = Color.DKGRAY
                             itemRadio = 2.0f
                             rowCount = 5
                             maxSelected = 3
