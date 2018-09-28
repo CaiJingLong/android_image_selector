@@ -34,6 +34,9 @@ class MainActivity : AppCompatActivity() {
                             themeColor = Color.parseColor("#3772E0")
                             textColor = Color.WHITE
                             itemRadio = 2.0f
+                            rowCount = 5
+                            maxSelected = 3
+                            padding = 15
                         }
                 )
             }

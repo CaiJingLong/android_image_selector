@@ -62,7 +62,8 @@ class GalleryContentFragment : Fragment(), ImageSelectedProvider, GalleryItemAda
         mLayoutBottomBar.setBackgroundColor(config.themeColor)
 
         mRecyclerImage.layoutManager = GridLayoutManager(context, config.rowCount)
-        mRecyclerImage.addItemDecoration(GalleryDecoration(config))
+//        mRecyclerImage.addItemDecoration(GalleryDecoration(config))
+        mRecyclerImage.addItemDecoration(GridDividerItemDecoration(config.padding, config.dividerColor))
         val galleryItemAdapter = GalleryItemAdapter(imageDatas, this, config)
         this.adapter = galleryItemAdapter
         galleryItemAdapter.onItemClickListener = this
