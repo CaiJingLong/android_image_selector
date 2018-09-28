@@ -16,6 +16,7 @@ import android.widget.TextView
 import top.kikt.gallerypicker.GalleryOption
 import top.kikt.gallerypicker.GalleryOption.Companion.config
 import top.kikt.gallerypicker.R
+import top.kikt.gallerypicker.engine.ImageSelectFinishCallback
 import top.kikt.gallerypicker.engine.ImageSelectedProvider
 import top.kikt.gallerypicker.engine.PreviewCurrentImageProvider
 import top.kikt.gallerypicker.entity.ImageEntity
@@ -76,6 +77,12 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
         }
 
         mTvSure.text = "确认(${selectorProvider.selectedList.count()}/${config.maxSelected})"
+        mTvSure.setOnClickListener {
+            val act = activity
+            if (act is ImageSelectFinishCallback) {
+                act.selectedSure(selectorProvider.selectedList)
+            }
+        }
         updateSelected()
 
         mIvBack.setOnClickListener {
@@ -106,7 +113,7 @@ class GalleryPreviewFragment : Fragment(), GalleryPreviewThumbAdapter.OnChangeLi
 
         if (!removeThumbFromInit) {
             selectorProvider.sortForInitList(galleryPreviewThumbAdapter.initList)
-        }else{
+        } else {
             selectorProvider.notifyUpdate()
         }
     }
